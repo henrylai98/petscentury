@@ -628,7 +628,7 @@ class _PostScreenState extends State<PostScreen> with TickerProviderStateMixin {
                                                                 Container(
                                                                     alignment:
                                                                         Alignment
-                                                                            .bottomRight,
+                                                                            .center,
                                                                     color: Colors
                                                                         .white,
                                                                     height: 40,

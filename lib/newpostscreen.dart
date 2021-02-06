@@ -33,12 +33,14 @@ class _NewPostScreenState extends State<NewPostScreen> {
     screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.brown,
           title: Text("New Post"),
         ),
         body: Container(
+          color: Color(0xFFFFF3E0),
             child: Padding(
                 padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
-                child: SingleChildScrollView(
+               
                   child: Column(
                     children: [
                       GestureDetector(
@@ -89,7 +91,7 @@ class _NewPostScreenState extends State<NewPostScreen> {
                       SizedBox(height: 10),
                     ],
                   ),
-                ))));
+                )));
   }
 
   void _onPostDialog() {

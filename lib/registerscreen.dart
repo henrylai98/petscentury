@@ -1,4 +1,5 @@
-
+import 'dart:io';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
 import 'package:petscentury/loginscreen.dart';
@@ -6,6 +7,9 @@ import 'package:progress_dialog/progress_dialog.dart';
 import 'package:http/http.dart' as http;
 import 'package:email_validator/email_validator.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:image_cropper/image_cropper.dart';
+
 
 
 class RegisterScreen extends StatefulWidget {
@@ -30,6 +34,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool _passwordVisible = false;
   bool _isChecked = false;
   bool _rememberMe = false;
+  File _image;
 
  
 
@@ -58,6 +63,31 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
               ),
+              GestureDetector(
+                  onTap: () => {_onPictureSelection()},
+                  child: Container(
+                    height: 300,
+                    width: 300,
+                    decoration: BoxDecoration(
+                      color: Colors.black12,
+                      image: DecorationImage(
+                        image: _image == null
+                            ? AssetImage('assets/images/camera.jpg')
+                            : FileImage(_image),
+                        fit: BoxFit.cover,
+                      ),
+                      border: Border.all(
+                        width: 3.0,
+                        color: Colors.grey,
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(
+                              5.0) //         <--- border radius here
+                          ),
+                    ),
+                  )),
+              SizedBox(height: 5),
+              Text("Click image to take profile picture",
+                  style: TextStyle(fontSize: 10.0, color: Colors.black)),
               
               Padding(
                   padding: EdgeInsets.all(40),
@@ -343,6 +373,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   void _dialog() {
+    if (_image == null) {
+      Toast.show("Please set your profile picture.", context,
+          duration: Toast.LENGTH_LONG, gravity: Toast.TOP);
+      return;
+    }
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -402,6 +437,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
       _email = _emailController.text;
       _phone = _phoneController.text;
       _password = _passController.text;
+      final dateTime = DateTime.now();
+      String base64Image = base64Encode(_image.readAsBytesSync());
+      print(base64Image);
       
       ProgressDialog pr = new ProgressDialog(context,
           type: ProgressDialogType.Normal, isDismissible: false);
@@ -412,10 +450,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
           "email": _email,
           "password": _password,
           "phone": _phone,
+          "encoded_string": base64Image,
+           "imagename": _phone + "-${dateTime.microsecondsSinceEpoch}",
           
       }).then((res) {
         print(res.body);
-        if (res.body == "succes") {
+        if (res.body == "success") {
           Toast.show(
             "Registration success. Please check your email for OTP verification.",
             context,
@@ -457,6 +497,121 @@ class _RegisterScreenState extends State<RegisterScreen> {
     setState(() {
       _rememberMe = value;
     });
+  }
+  _onPictureSelection() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+            //backgroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20.0))),
+            content: new Container(
+              //color: Colors.white,
+              height: 200,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                      alignment: Alignment.center,
+                      child: Text(
+                        "Take picture from:",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16),
+                      )),
+                  SizedBox(height: 5),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Flexible(
+                          child: MaterialButton(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5.0)),
+                        minWidth: 100,
+                        height: 100,
+                        child: Text('Camera',
+                            style: TextStyle(
+                              color: Colors.black,
+                            )),
+                        //color: Color.fromRGBO(101, 255, 218, 50),
+                        color: Colors.blueGrey,
+                        textColor: Colors.black,
+                        elevation: 10,
+                        onPressed: () =>
+                            {Navigator.pop(context), _chooseCamera()},
+                      )),
+                      SizedBox(width: 10),
+                      Flexible(
+                          child: MaterialButton(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5.0)),
+                        minWidth: 100,
+                        height: 100,
+                        child: Text('Gallery',
+                            style: TextStyle(
+                              color: Colors.black,
+                            )),
+                        //color: Color.fromRGBO(101, 255, 218, 50),
+                        color: Colors.blueGrey,
+                        textColor: Colors.black,
+                        elevation: 10,
+                        onPressed: () => {
+                          Navigator.pop(context),
+                          _chooseGallery(),
+                        },
+                      )),
+                    ],
+                  ),
+                ],
+              ),
+            ));
+      },
+    );
+  }
+
+  void _chooseCamera() async {
+    // ignore: deprecated_member_use
+    _image = await ImagePicker.pickImage(
+        source: ImageSource.camera, maxHeight: 800, maxWidth: 800);
+    _cropImage();
+    setState(() {});
+  }
+
+  void _chooseGallery() async {
+    // ignore: deprecated_member_use
+    _image = await ImagePicker.pickImage(
+        source: ImageSource.gallery, maxHeight: 800, maxWidth: 800);
+    _cropImage();
+    setState(() {});
+  }
+
+  Future<Null> _cropImage() async {
+    File croppedFile = await ImageCropper.cropImage(
+        sourcePath: _image.path,
+        aspectRatioPresets: Platform.isAndroid
+            ? [
+                CropAspectRatioPreset.square,
+              ]
+            : [
+                CropAspectRatioPreset.square,
+              ],
+        androidUiSettings: AndroidUiSettings(
+            toolbarTitle: 'Resize',
+            toolbarColor: Colors.deepOrange,
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.square,
+            lockAspectRatio: false),
+        iosUiSettings: IOSUiSettings(
+          title: 'Cropper',
+        ));
+    if (croppedFile != null) {
+      _image = croppedFile;
+      setState(() {});
+    }
   }
 
 
