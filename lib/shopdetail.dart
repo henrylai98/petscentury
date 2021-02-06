@@ -54,6 +54,7 @@ class _ShopDetailsState extends State<ShopDetails> {
       ),
       body: Column(children: [
         Container(
+           color: Color(0xFFFFF3E0),
             height: screenHeight / 2.8,
             width: screenWidth / 0.3,
             child: CachedNetworkImage(

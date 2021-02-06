@@ -18,7 +18,7 @@ class CommentScreen extends StatefulWidget {
 class _CommentScreenState extends State<CommentScreen> {
   GlobalKey<RefreshIndicatorState> refreshKey;
   double screenHeight, screenWidth;
-  List postList;
+  List commentList;
   String titlecenter = "Loading comments...";
   TextEditingController _commentcontroller = TextEditingController();
   String _comment="";
@@ -35,8 +35,8 @@ class _CommentScreenState extends State<CommentScreen> {
     screenWidth = MediaQuery.of(context).size.width;
     return SafeArea(
         child: Scaffold(
-            body: Column(children: [
-      postList == null
+            body:Container(color: Color(0xFFFFF3E0),child: Column(children: [
+      commentList == null
           ? Flexible(
               child: Container(
                   child: Center(
@@ -55,7 +55,7 @@ class _CommentScreenState extends State<CommentScreen> {
                     _loadcomments();
                   },
                   child: ListView(
-                      children: List.generate(postList.length, (index) {
+                      children: List.generate(commentList.length, (index) {
                     return Padding(
                       padding: EdgeInsets.all(20),
                       child: SingleChildScrollView(
@@ -75,10 +75,16 @@ class _CommentScreenState extends State<CommentScreen> {
                                         "http://yhkywy.com/petscentury/images/profileimages/${widget.user.email}.jpg?"),
                                   )),
                               SizedBox(width: 10),
-                              Text(postList[index]['postname'],
+                              Text(commentList[index]['postcomment'],
                                   style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold)),
+                                      Container( alignment: Alignment.centerRight,child:
+                                     
+                              Text(commentList[index]['datetime'],
+                                  style: TextStyle(
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.bold))),
                             ],
                           )
                         ]),
@@ -100,7 +106,7 @@ class _CommentScreenState extends State<CommentScreen> {
               onPressed: () => _addcomments()),
         
     
-    ])));
+    ]))));
   }
 
   void _addcomments() {
@@ -144,14 +150,14 @@ class _CommentScreenState extends State<CommentScreen> {
     }).then((res) {
       print(res.body);
       if (res.body == "nodata") {
-        postList = null;
+        commentList = null;
         setState(() {
           titlecenter = "No Comment Found.";
         });
       } else {
         setState(() {
           var jsondata = json.decode(res.body);
-          postList = jsondata["post"];
+          commentList = jsondata["comments"];
         });
       }
     }).catchError((err) {

@@ -505,7 +505,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(20.0))),
               title: new Text(
-                "Change your name?",
+                "Change your phone number?",
                 style: TextStyle(
                   color: Colors.brown,
                 ),

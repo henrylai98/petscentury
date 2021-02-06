@@ -68,7 +68,7 @@ class _PayScreenState extends State<PayScreen> {
         backgroundColor: Colors.brown,
         title: Text('Your Cart'),
       ),
-      body: Column(
+      body: Container( color: Color(0xFFFFF3E0),child:Column(
         children: [
           cartList == null
               ? Flexible(
@@ -236,7 +236,7 @@ class _PayScreenState extends State<PayScreen> {
                 ])
         ],
       ),
-    ));
+    )));
   }
 
   _loadMapDialog() {

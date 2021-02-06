@@ -46,7 +46,7 @@ class _CartScreenState extends State<CartScreen> {
         backgroundColor: Colors.brown,
         title: Text('Your Cart'),
       ),
-      body: Column(
+      body:Container( color: Color(0xFFFFF3E0),child: Column(
         children: [
           cartList == null
               ? Flexible(
@@ -135,7 +135,7 @@ class _CartScreenState extends State<CartScreen> {
           ))
         ],
       ),
-    ));
+    )));
   }
 
   _loadproductDetails(int index) async {
