@@ -37,8 +37,10 @@ class _PaymentHistoryScreenState extends State<PaymentHistoryScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Payment History'),
+        backgroundColor: Colors.brown,
       ),
-      body: Center(
+      body: Container(
+         color: Color(0xFFFFF3E0),
         child: Column(children: <Widget>[
           
           _paymentdata == null

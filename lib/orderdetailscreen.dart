@@ -36,7 +36,7 @@ class _OrderDetailState extends State<OrderDetail> {
         title: Text('Order Details',style: TextStyle(color:Colors.white),),
       ),
       body: Container(
-        
+        color: Color(0xFFFFF3E0),
         child: Column(children: <Widget>[
           _orderdetails == null
               ? Flexible(
@@ -59,7 +59,7 @@ class _OrderDetailState extends State<OrderDetail> {
                             child: InkWell(
                                 onTap: null,
                                 child: Card(
-                                  color: Colors.brown[100],
+                                  
                                     elevation: 8,
                                     child: Padding(
                                       padding: EdgeInsets.all(5),
@@ -72,7 +72,7 @@ class _OrderDetailState extends State<OrderDetail> {
                                               child: Text(
                                                 (index + 1).toString()+'.',
                                                 style: TextStyle(
-                                                    color: Colors.pink,fontWeight: FontWeight.bold),
+                                                    color: Colors.brown,fontWeight: FontWeight.bold),
                                               )),
                                           Expanded(
                                             flex: 2,
@@ -81,7 +81,7 @@ class _OrderDetailState extends State<OrderDetail> {
                                                 child: CachedNetworkImage(
                                                   fit: BoxFit.fill,
                                                   imageUrl: 
-                                                      "http://yhkywy.com/petscentury/images/productimages/${_orderdetails[index]['id']}.jpg",
+                                                      "http://yhkywy.com/petscentury/images/productimages/${_orderdetails[index]['image']}.jpg",
                                                   placeholder: (context, url) =>
                                                       new CircularProgressIndicator(),
                                                   errorWidget:
@@ -94,7 +94,7 @@ class _OrderDetailState extends State<OrderDetail> {
                                             child: Text(
                                               _orderdetails[index]['name'],
                                               style: TextStyle(
-                                                  color: Colors.pink,fontWeight: FontWeight.bold),
+                                                  color: Colors.brown,fontWeight: FontWeight.bold),
                                             ),
                                           ),
                                          Expanded(
@@ -102,7 +102,7 @@ class _OrderDetailState extends State<OrderDetail> {
                                             child: Text(
                                               _orderdetails[index]['quantity'],
                                               style: TextStyle(
-                                                  color: Colors.pink,fontWeight: FontWeight.bold),
+                                                  color: Colors.brown,fontWeight: FontWeight.bold),
                                             ),
                                           ),
                                           

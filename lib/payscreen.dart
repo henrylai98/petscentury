@@ -215,7 +215,7 @@ class _PayScreenState extends State<PayScreen> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 70),
+                  SizedBox(height: 20),
                   Container(
                       child: Padding(
                     padding: EdgeInsets.all(10),
